@@ -24,20 +24,24 @@ $date = date("Y-m-d");												// текущая дата
 echo "\n".date("H:i:s")." Синхронизация с облаком\n\n";
 
 $listLocal = $func->listDirectory($dump_dir);						// получаю список локальных каталогов с бэкапами							
-$listCloud = scandir($google_dir);
+$listCloud = scandir($google_dir									// список облачных каталогов с бэкапами
 
-if($listCloud && is_array($listCloud)){
-	foreach($listCloud as $dir){
-		if(($dir != '.') && ($dir != '..')){
-			if(!in_array($dir, $listLocal)){
-				$func->DeleteDirectory(realpath($google_dir.DIRECTORY_SEPARATOR.$dir));
-				$func->WriteLog("Удалены облачные бэкапы $dir");
+if($listLocal && is_array($listLocal)){
+	if($listCloud && is_array($listCloud)){
+		foreach($listCloud as $dir){
+			if(($dir != '.') && ($dir != '..')){
+				if(!in_array($dir, $listLocal)){
+					$func->DeleteDirectory(realpath($google_dir.DIRECTORY_SEPARATOR.$dir));
+					$func->WriteLog("Удалены облачные бэкапы $dir");
+				}
 			}
 		}
-	}
-}
-
-$func->xCopy($dump_dir, $google_dir);							// копирование на облако новых бэкапов
+		
+		if(is_dir("$dump_dir/$date")){
+			$func->xCopy("$dump_dir/$date", "$google_dir/$date");							// копирование на облако новых бэкапов
+		}else $func->WriteLog('Бэкапы за $date еще не созданы.', true);
+	}else $func->WriteLog('Нет доступа к облачной папке для хранения бэкапов.', true);
+}else $func->WriteLog('Нет доступа к локальной папке для хранения бэкапов.', true);
 
 echo "\n\n".date("H:i:s")." Синхронизация завершена\n\n";
 ?>
