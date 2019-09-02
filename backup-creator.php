@@ -32,8 +32,6 @@ if(!is_dir($dump_path)) mkdir($dump_path);						// создаю папку дл�
 
 /* Удаляем старые логи */
 $logFile = $conf->log_name;
-$log_cloud = $conf->log_cloud;
-if(file_exists($log_cloud) && is_readable($log_cloud)) unlink($log_cloud);
 if(file_exists($logFile) && is_readable($logFile)){
 	echo "\n".date("H:i:s")." Удаляю старые логи\n\n";
 	$file = file($logFile);															// читаем файл в массив
