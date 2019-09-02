@@ -24,7 +24,7 @@ $date = date("Y-m-d");												// текущая дата
 echo "\n".date("H:i:s")." Синхронизация с облаком\n\n";
 
 $listLocal = $func->listDirectory($dump_dir);						// получаю список локальных каталогов с бэкапами							
-$listCloud = scandir($google_dir									// список облачных каталогов с бэкапами
+$listCloud = scandir($google_dir);									// список облачных каталогов с бэкапами
 
 if($listLocal && is_array($listLocal)){
 	if($listCloud && is_array($listCloud)){
