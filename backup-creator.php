@@ -20,6 +20,7 @@ $zip	= new ZipArchive;
 
 if(php_sapi_name() != 'cli') $func->WriteLog('Это приложение должно быть запущено только из командной строки.', true);
 
+$max_query_length = $conf->max_query_length;					// максимальный размер SQL-запроса (INSERT)
 $date = date("Y-m-d");											// текущая дата
 $secondsInADay = 60 * 60 * 24;									// к-во секунд в дне
 $day_now = floor(time() / $secondsInADay);						// к-во дней на сегодня
