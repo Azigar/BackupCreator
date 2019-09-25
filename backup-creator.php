@@ -257,7 +257,7 @@ if($sites){
 		$zipFile = "$dump_path_site/{$sites[$i]['domain']}_$date.zip"; 									// полный путь к новому архиву
 		
 		if(!file_exists($zipFile)){																		// если не существует архива с дампом этой сайта
-			$allFiles = $func->getDirContents($sites[$i]['path']);												// получаем список всех файлов в папке сайта с полными путями
+			$allFiles = $func->getDirContents($sites[$i]['path']);										// получаем список всех файлов в папке сайта с полными путями
 			
 			if($zip->open($zipFile, ZipArchive::CREATE) === TRUE){										// если архив получилось создать
 				foreach($allFiles as $pathFile){														// перебор файлов

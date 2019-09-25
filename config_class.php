@@ -14,6 +14,7 @@ class Config{
 	public $max_query_length;
 	public $index_arr;
 	public $db_exception;
+	public $site_exception;
 	
 	public function __construct(){
 		$conf = parse_ini_file(__DIR__.'/config.ini');									// читаю config.ini
