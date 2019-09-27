@@ -261,17 +261,31 @@ if($sites){
 			
 			if($zip->open($zipFile, ZipArchive::CREATE) === TRUE){										// если архив получилось создать
 				foreach($allFiles as $pathFile){														// перебор файлов
-					$local = substr($pathFile, strlen($sites[$i]['path'].'/'));							// путь к файлу без полного пути	
-					$dirName = dirname($local);															// каталог файла
+					$exception = false;
+					$isAdd = false;
+					$local = substr($pathFile, strlen($sites[$i]['path'].'/'));							// путь к файлу относительно корня папки сайта	
+					$dirName = dirname($local);															// путь к файлу
 					$fileName = basename($pathFile);													// имя текущего файла (без путей)
-					$exception = $conf->site_exception[$sites[$i]['domain']][$dirName];					// исключение
 					
-					if($exception){																		// если эта папка в исключении
-						if($exception != 1){															// но не полностью
-							$files_exception = array_map('trim', explode(',', $exception));
-							if(!in_array($fileName, $files_exception)) $zip->addFile($pathFile, $local);
+					foreach($conf->site_exception[$sites[$i]['domain']] as $dir => $val){				// перебор исключений
+						$pos = strpos($dirName, $dir);													// вхождение исключения в пути
+						if($pos !== false){																// если текущий путь частично или полностью в исключении
+							$exception = $conf->site_exception[$sites[$i]['domain']][$dir];				// исключение
+							break;
 						}
-					}else $zip->addFile($pathFile, $local);
+					}
+					
+					if($exception){																		// если этот путь в исключении
+						if($exception != 1){															// но не полностью
+							$exception = $conf->site_exception[$sites[$i]['domain']][$dirName];			// исключение
+							if($exception){
+								$files_exception = array_map('trim', explode(',', $exception));
+								if(!in_array($fileName, $files_exception)) $isAdd = true;
+							}else $isAdd = true;
+						}
+					}else $isAdd = true;
+					
+					if($isAdd) $zip->addFile($pathFile, $local);
 				}
 				$zip->close;
 				$func->WriteLog("Создан архив $zipFile");
