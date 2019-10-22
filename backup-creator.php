@@ -267,13 +267,16 @@ if($sites){
 					$dirName = dirname($local);															// путь к файлу
 					$fileName = basename($pathFile);													// имя текущего файла (без путей)
 					
-					foreach($conf->site_exception[$sites[$i]['domain']] as $dir => $val){				// перебор исключений
-						$pos = strpos($dirName, $dir);													// вхождение исключения в пути
-						if($pos !== false){																// если текущий путь частично или полностью в исключении
-							$exception = $conf->site_exception[$sites[$i]['domain']][$dir];				// исключение
-							break;
+					if($conf->site_exception[$sites[$i]['domain']]){
+						foreach($conf->site_exception[$sites[$i]['domain']] as $dir => $val){				// перебор исключений
+							$pos = strpos($dirName, $dir);													// вхождение исключения в пути
+							if($pos !== false){																// если текущий путь частично или полностью в исключении
+								$exception = $conf->site_exception[$sites[$i]['domain']][$dir];				// исключение
+								break;
+							}
 						}
 					}
+					
 					
 					if($exception){																		// если этот путь в исключении
 						if($exception != 1){															// но не полностью
